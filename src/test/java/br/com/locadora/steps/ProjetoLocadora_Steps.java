@@ -5,6 +5,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Map;
 
 import org.junit.Assert;
 
@@ -13,6 +14,7 @@ import br.com.locadoda.entidades.NotaAluguel;
 import br.com.locadoda.entidades.TipoAluguel;
 import br.com.locadoda.servicos.AluguelService;
 import br.com.locadoda.utilitarios.DataUtils;
+import cucumber.api.DataTable;
 import cucumber.api.PendingException;
 import cucumber.api.java.pt.Dado;
 import cucumber.api.java.pt.Então;
@@ -24,13 +26,26 @@ public class ProjetoLocadora_Steps {
 	private AluguelService aluguel= new AluguelService();
 	private NotaAluguel nota;
 	private String erro;
-	private TipoAluguel tipoAluguel= TipoAluguel.COMUM;
+	private TipoAluguel tipoAluguel;
 	
 	
 	@Dado("^um filme com estoque de (\\d+) unidades$")
 	public void um_filme_com_estoque_de_unidades(int arg1) throws Throwable {
 	   filme = new Filme();
 	   filme.setEstoque(arg1);
+	}
+	
+	@Dado("^um filme$")
+	public void umFilme(DataTable tabela) throws Throwable {
+	    Map<String, String> map = tabela.asMap(String.class, String.class);
+	    filme = new Filme();
+		 filme.setEstoque(Integer.parseInt(map.get("estoque")));
+		 filme.setAluguel(Integer.parseInt(map.get("preco")));
+		 String tipo = map.get("tipo");
+		 tipoAluguel = tipo.equals("semanal")?TipoAluguel.SEMANAL: tipo.equals("extendido")?
+				    TipoAluguel.EXTENDIDO: TipoAluguel.COMUM;
+		 
+		 
 	}
 
 	@Dado("^que o preço de aluguel seja R\\$ (\\d+)$")
