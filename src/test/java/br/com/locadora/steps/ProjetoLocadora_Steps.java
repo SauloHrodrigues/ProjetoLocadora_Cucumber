@@ -10,6 +10,7 @@ import org.junit.Assert;
 
 import br.com.locadoda.entidades.Filme;
 import br.com.locadoda.entidades.NotaAluguel;
+import br.com.locadoda.entidades.TipoAluguel;
 import br.com.locadoda.servicos.AluguelService;
 import br.com.locadoda.utilitarios.DataUtils;
 import cucumber.api.PendingException;
@@ -23,7 +24,7 @@ public class ProjetoLocadora_Steps {
 	private AluguelService aluguel= new AluguelService();
 	private NotaAluguel nota;
 	private String erro;
-	private String tipoAluguel;
+	private TipoAluguel tipoAluguel= TipoAluguel.COMUM;
 	
 	
 	@Dado("^um filme com estoque de (\\d+) unidades$")
@@ -69,7 +70,8 @@ public class ProjetoLocadora_Steps {
 
 	@Dado("^que o tipo do aluguel seja (.*)$")
 	public void que_o_tipo_do_aluguel_seja_extendido(String tipo) throws Throwable {
-	   tipoAluguel = tipo;
+	   tipoAluguel = tipo.equals("semanal")?TipoAluguel.SEMANAL: tipo.equals("extendido")?
+			    TipoAluguel.EXTENDIDO: TipoAluguel.COMUM;
 	}
 
 	@Então("^o preço do aluguel será R\\$(\\d+)$")
